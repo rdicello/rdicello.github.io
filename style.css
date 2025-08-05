@@ -1,0 +1,367 @@
+:root {
+    --rainbow-x-factor: 200%;
+    --rainbow-background: linear-gradient(to right,
+            rgb(255, 184, 184),
+            rgb(255, 236, 201),
+            rgb(255, 255, 193),
+            rgb(190, 255, 190),
+            rgb(181, 181, 255),
+            rgb(223, 179, 255),
+            rgb(255, 188, 255),
+            rgb(255, 186, 186)
+            /* Repeat red to create a seamless loop */
+        );
+    --text-shadow:
+        0 0 1vi black;
+    --ch-width: 15ch
+}
+
+@font-face {
+    font-family: 'CalSans';
+    src: url('assets/fonts/CalSans-Regular.ttf');
+
+}
+
+@font-face {
+    font-family: 'SecularOne';
+    src: url('assets/fonts/SecularOne-Regular.ttf');
+
+}
+
+@font-face {
+    font-family: 'GrandifloraOne';
+    src: url('assets/fonts/GrandifloraOne-Regular.ttf');
+
+}
+
+@font-face {
+    font-family: 'Bungee';
+    src: url('assets/fonts/Bungee-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Jakarta';
+    src: url('assets/fonts/PlusJakartaSans-VariableFont_wght.ttf');
+}
+
+
+
+
+html,
+body {
+
+    margin: 0;
+    padding: 0;
+
+    color: black;
+    overflow-x: hidden;
+
+
+
+
+}
+
+
+
+.home-container {
+    position: fixed;
+    bottom: -80vh;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    left: 30px;
+    padding: 5vi;
+    gap: 10px;
+    z-index: -1;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+#name {
+
+
+    color: white;
+    font-family: 'CalSans', sans-serif;
+    font-size: 6vi;
+    animation: 2s fade-in forwards;
+    text-shadow: 0 0 100px white
+}
+
+@keyframes increase-width {
+    from {
+        width: 0;
+        opacity: 0;
+    }
+
+    to {
+        width: 30vw;
+        opacity: 1;
+
+    }
+}
+
+@keyframes rainbow-animate {
+    0% {
+        background-position: 0% 0%;
+        /* Start of the gradient */
+    }
+
+    100% {
+        background-position: var(--rainbow-x-factor) 100%;
+        /* Shift the gradient completely across */
+    }
+}
+
+
+#underline {
+    --rainbow-x-factor: 200%;
+    height: 1vh;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+    background: var(--rainbow-background);
+    background-size: var(--rainbow-x-factor) 100%;
+    width: 30vw;
+    animation:
+        increase-width 1.5s ease-in-out,
+        rainbow-animate 3s linear infinite forwards;
+
+
+}
+
+@keyframes brand-statement-appear {
+    0% {
+        top: -30%;
+
+    }
+
+    100% {
+        top: 40%;
+
+    }
+}
+
+@keyframes typing {
+    from {
+        width: 0;
+
+    }
+
+    1% {
+        opacity: 1;
+    }
+
+
+
+    to {
+        width: var(--ch-width);
+        opacity: 1;
+    }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+
+    /* Make the caret transparent at the start and end */
+    from {
+        border-color: rgb(255, 255, 255);
+    }
+
+    49% {
+        border-color: rgb(255, 255, 255);
+    }
+
+    /* Blink to visible in the middle of the cycle */
+    50% {
+        border-color: transparent;
+    }
+
+    to {
+        border-color: transparent;
+    }
+}
+
+.brand-statement-container {
+    display: flex;
+    position: fixed;
+    flex-direction: column;
+    gap: 20px;
+    top: 40%;
+    left: 50%;
+
+}
+
+.brand-statement {
+
+    opacity: 0;
+
+    border-right: .3em solid rgb(255, 255, 255);
+    letter-spacing: .1em;
+    top: 40%;
+    left: 50%;
+    justify-content: center;
+    color: white;
+    font-family: 'Bungee', sans-serif;
+    font-size: 3.5vi;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 3.5vi;
+
+
+}
+
+.brand-statement-1 {
+
+
+    --ch-width: 16ch;
+    /* The blink-caret animation now runs for 0.32s, 6.25 times */
+    animation: 0.9s typing steps(16, end) 1.7s forwards,
+        0.9s blink-caret step-end 2 1.7s forwards;
+
+}
+
+.brand-statement-2 {
+    --ch-width: 15ch;
+    /* The 2.2s delay is applied to both animations */
+    animation: typing 1s steps(16, end) 3.2s forwards,
+
+        blink-caret 0.9s step-end 2 3.2s forwards;
+}
+
+
+#the-reason {
+
+    position: fixed;
+    width: 100%;
+    height: 100%;
+
+    z-index: -2;
+    filter: blur(7px);
+    box-sizing: border-box;
+    object-fit: cover;
+
+
+}
+
+@keyframes button-appear {
+    0% {
+        left: -30%;
+
+    }
+
+    100% {
+        left: 0%;
+
+    }
+}
+
+#button {
+    position: fixed;
+    top: 25%;
+    left: -30%;
+    font-size: 9px;
+    width: 90px;
+    --rainbow-x-factor: 1000%;
+    font-family: 'Bungee', sans-serif;
+    background-color: rgba(0, 187, 144, 0.356);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    background: var(--rainbow-background);
+    background-size: var(--rainbow-x-factor) 100%;
+
+
+    animation: 1.5s button-appear 4.6s ease-out forwards,
+        10s rainbow-animate linear infinite forwards;
+    text-shadow: var(--text-shadow);
+}
+
+.about-me {
+    max-width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    margin-top: 100vh;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    padding: 40px;
+    background-color: rgb(33, 33, 33);
+    color: white;
+    border: 10px solid white;
+    border-bottom: none;
+
+}
+
+.about-me h1 {
+
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.379);
+    font-family: 'CalSans', sans-serif;
+    font-size: 4vi;
+    align-self: center;
+    margin-bottom: 15px;
+
+}
+
+.about-me p {
+    text-indent: 2em;
+    align-self: center;
+    font-family: 'Jakarta', sans-serif;
+    line-height: 30px;
+    font-size: 1.3vi;
+    font-weight: lighter;
+}
+
+.work {
+    display: flex;
+    position: relative;
+
+    box-sizing: border-box;
+
+    height: 100vh;
+    width: 100vw;
+    background-color: rgb(33, 33, 33);
+    z-index: 3;
+    width: 100%;
+    padding: 80px;
+    padding-top: 0;
+    max-width: 100%;
+    flex-direction: column;
+
+    border: 10px solid white;
+    border-top: none;
+
+
+}
+
+.work h1 {
+
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.379);
+    font-family: 'CalSans', sans-serif;
+    font-size: 4vi;
+    align-self: center;
+    color: white;
+
+}
+
+.the-reason-container {
+    color: white;
+}
+
+.the-reason-container h2 {
+    font-family: 'Bungee', sans-serif;
+}
+
+.the-reason-container p {
+    font-family: 'Jakarta', sans-serif;
+
+}
