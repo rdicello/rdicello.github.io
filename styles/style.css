@@ -1,0 +1,528 @@
+/* --- Root CSS Variables --- */
+/* Define reusable colors and styles that can be referenced later */
+:root {
+    --rainbow-x-factor: 200%;
+    /* Controls horizontal size of rainbow gradient */
+    --rainbow-background: linear-gradient(to right,
+            /* Smooth rainbow gradient from left to right */
+            rgb(255, 184, 184),
+            rgb(255, 236, 201),
+            rgb(255, 255, 193),
+            rgb(190, 255, 190),
+            rgb(181, 181, 255),
+            rgb(223, 179, 255),
+            rgb(255, 188, 255),
+            rgb(255, 186, 186)
+            /* Repeats red to make the gradient loop seamlessly */
+        );
+    --text-shadow: 0 0 1vi black;
+    /* Subtle black glow behind text */
+    --ch-width: 16ch;
+    /* Used for typing effect width (number of characters) */
+    --before-transform: none;
+    /* Placeholder for possible transform effects */
+}
+
+/* --- Animations --- */
+/* Continuous spin animation, rotates full 360 degrees */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* --- Custom Fonts --- */
+/* Load custom fonts from your assets folder to use in the page */
+@font-face {
+    font-family: 'CalSans';
+    src: url('../assets/fonts/CalSans-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'SecularOne';
+    src: url('../assets/fonts/SecularOne-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'GrandifloraOne';
+    src: url('../assets/fonts/GrandifloraOne-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Bungee';
+    src: url('../assets/fonts/Bungee-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Jakarta';
+    src: url('../assets/fonts/PlusJakartaSans-VariableFont_wght.ttf');
+}
+
+/* --- Global Styles --- */
+html,
+body {
+    background-color: black;
+    /* Dark background for contrast */
+    margin: 0;
+    /* Remove default margin */
+    padding: 0;
+    /* Remove default padding */
+    overflow-x: hidden;
+    /* Prevent horizontal scrolling */
+}
+
+/* --- Main container fixed at bottom left --- */
+.home-container {
+    position: fixed;
+    /* Stays in place when scrolling */
+    bottom: -80vh;
+    /* Positioned offscreen initially */
+    height: 100vh;
+    /* Full viewport height */
+    display: flex;
+    flex-direction: column;
+    /* Stack children vertically */
+    left: 30px;
+    /* Slight left margin */
+    padding: 5vi;
+    /* Vertical padding relative to viewport */
+    gap: 10px;
+    /* Space between child elements */
+}
+
+/* --- Fade in effect for elements --- */
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Name text styling */
+#name {
+    opacity: 0;
+    /* Start invisible */
+    color: white;
+    /* White text */
+    font-family: 'CalSans', sans-serif;
+    /* Use custom font */
+    font-size: 6vi;
+    /* Responsive size */
+    animation: 2s fade-in 0.7s forwards;
+    /* Fade in after 0.7s */
+    text-shadow: 0 0 100px white;
+    /* Strong white glow */
+}
+
+/* --- Width increase animation for underline --- */
+@keyframes increase-width {
+    from {
+        width: 0;
+        opacity: 0;
+    }
+
+    to {
+        width: 30vw;
+        opacity: 1;
+    }
+}
+
+/* --- Rainbow gradient animation moving horizontally --- */
+@keyframes rainbow-animate {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    100% {
+        background-position: var(--rainbow-x-factor) 100%;
+    }
+}
+
+/* Underline styling under text with glowing rainbow effect */
+#underline {
+    opacity: 0;
+    --rainbow-x-factor: 200%;
+    /* Controls how far the rainbow moves */
+    height: 1vh;
+    /* Thin line */
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+    /* Soft glow */
+    background: var(--rainbow-background);
+    /* Rainbow gradient */
+    background-size: var(--rainbow-x-factor) 100%;
+    /* Gradient size */
+    width: 30vw;
+    /* Start width */
+    animation:
+        increase-width 1.5s ease-in-out 0.7s forwards,
+        /* Animate growing width */
+        rainbow-animate 3s linear infinite forwards 0.7s;
+    /* Animate rainbow moving */
+}
+
+/* --- Brand statement animations --- */
+/* Slide brand statement vertically */
+@keyframes brand-statement-appear {
+    0% {
+        top: -30%;
+    }
+
+    100% {
+        top: 40%;
+    }
+}
+
+/* Typing effect expanding width from 0 to specified width */
+@keyframes typing {
+    from {
+        width: 0;
+    }
+
+    1% {
+        opacity: 1;
+    }
+
+    to {
+        width: var(--ch-width);
+        opacity: 1;
+    }
+}
+
+/* Cursor blinking effect for typing */
+@keyframes blink-caret {
+
+    from,
+    49% {
+        border-color: rgb(255, 255, 255);
+    }
+
+    50%,
+    to {
+        border-color: transparent;
+    }
+}
+
+/* Container for brand statement text */
+.brand-statement-container {
+    display: flex;
+    position: fixed;
+    flex-direction: column;
+    gap: 20px;
+    top: 40%;
+    left: 50%;
+}
+
+/* Styling the brand statement text */
+.brand-statement {
+    opacity: 0;
+    border-right: .3em solid white;
+    /* The blinking caret */
+    letter-spacing: .1em;
+    justify-content: center;
+    color: white;
+    font-family: 'Bungee', sans-serif;
+    font-size: 3.5vi;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 3.5vi;
+}
+
+/* Typing animation with blinking caret for first line */
+.brand-statement-1.animate {
+    --ch-width: 16ch;
+    /* 16 characters wide */
+    animation: 0.9s typing steps(16, end) 1.7s forwards,
+        0.9s blink-caret step-end 2 1.7s forwards;
+}
+
+/* Typing animation with blinking caret for second line */
+.brand-statement-2.animate {
+    --ch-width: 15ch;
+    animation: typing 1s steps(16, end) 3.2s forwards,
+        blink-caret 0.9s step-end 2 3.2s forwards;
+}
+
+/* Blur animation for fade effect */
+@keyframes blur {
+    0% {
+        filter: blur(0px);
+    }
+
+    100% {
+        filter: blur(10px);
+    }
+}
+
+/* The "the-reason" element styling and blur animation */
+#the-reason {
+    position: fixed;
+    box-sizing: border-box;
+    object-fit: cover;
+    transform: scale(1.1);
+    animation: 2s blur 1s forwards;
+}
+
+/* Button sliding in from left */
+@keyframes button-appear {
+    0% {
+        left: -30%;
+    }
+
+    100% {
+        left: 0%;
+    }
+}
+
+/* Style for the button with rainbow background and glow */
+#button {
+    position: fixed;
+    top: 25%;
+    left: -30%;
+    /* Start off-screen */
+    font-size: 9px;
+    width: 90px;
+    --rainbow-x-factor: 1000%;
+    /* Larger rainbow movement */
+    font-family: 'Bungee', sans-serif;
+    background-color: rgba(0, 187, 144, 0.356);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    background: var(--rainbow-background);
+    background-size: var(--rainbow-x-factor) 100%;
+    animation:
+        1.5s button-appear 4.6s ease-out forwards,
+        /* Slide in after 4.6s */
+        10s rainbow-animate linear infinite forwards;
+    /* Infinite rainbow animation */
+    text-shadow: var(--text-shadow);
+}
+
+/* Background block for "work" section */
+#work-bg {
+    content: "";
+    position: absolute;
+    background-color: rgb(40, 40, 40);
+    bottom: -65vh;
+    height: 15vh;
+    width: 100%;
+    transform: var(--before-transform, none);
+}
+
+/* Work section styling */
+.work {
+    display: flex;
+    top: 0;
+    position: relative;
+    box-sizing: border-box;
+    margin-top: 150vh;
+    /* Positioned far down for scrolling effect */
+    height: 100vh;
+    width: 100vw;
+    background-color: black;
+    z-index: 2;
+    align-items: center;
+    max-width: 100%;
+    border: 0;
+}
+
+/* Headings inside work section */
+.work h1 {
+    text-shadow: 0 0 40px rgb(223, 223, 223);
+    /* Glow behind text */
+    font-family: 'CalSans', sans-serif;
+    font-size: 4vi;
+    color: white;
+}
+
+/* Container for "the reason" text */
+.the-reason-container {
+    position: relative;
+    /* Needed for left positioning */
+    color: white;
+    line-height: 40px;
+    background-color: black;
+    height: 20vh;
+    bottom: 35vh;
+    width: 33vw;
+    padding-left: 6vw;
+    padding-top: 10vh;
+    z-index: 1;
+    /* Make sure it's above background */
+}
+
+/* Headings inside the reason container */
+.the-reason-container h2 {
+    top: 13%;
+    position: relative;
+    text-align: left;
+    font-size: 3vi;
+    font-family: 'Bungee', sans-serif;
+}
+
+/* Paragraphs inside the reason container */
+.the-reason-container p {
+    top: 13%;
+    max-width: 70%;
+    text-align: left;
+    font-size: 1.5vi;
+    font-family: 'Jakarta', sans-serif;
+    position: relative;
+}
+
+/* Container for Three.js canvas */
+#threejs-container {
+    position: absolute;
+    border-color: black;
+    border-radius: 100px;
+    display: block;
+    left: 20%;
+    cursor: pointer;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+    /* Behind text and other elements */
+}
+
+/* Audio button styling */
+#audioButton {
+    position: relative;
+    background: transparent;
+    cursor: pointer;
+    z-index: 10;
+    top: 20%;
+    /* Leaves space from any left text */
+}
+
+/* Play button icon styling (triangle) */
+#audioButton.play {
+    border-style: solid;
+    border-width: 10px 14px 8px;
+    border-color: transparent transparent transparent white;
+}
+
+/* Pause button styling */
+#audioButton.pause {
+    border: none;
+    background: transparent;
+}
+
+/* Pause icon bars */
+#audioButton.pause::before,
+#audioButton.pause::after {
+    content: '';
+    position: absolute;
+    top: -0.7vi;
+    width: 0.5vi;
+    height: 1.6vi;
+    background: white;
+    border-radius: 0.2vi;
+}
+
+#audioButton.pause::before {
+    left: 0.9vi;
+}
+
+#audioButton.pause::after {
+    right: 0.5vi;
+}
+
+/* GUI container (like dat.GUI panel) */
+#gui-container {
+    position: absolute;
+    z-index: 9000 !important;
+    /* Always on top */
+    top: 6%;
+    left: 0%;
+    background-color: white;
+}
+
+/* GUI style overrides */
+.dg {
+    color: #ffffff;
+    text-shadow: none !important;
+    font-family: 'Bungee', "sans-serif";
+    font-size: 1vi;
+}
+
+/* YouTube play icon style */
+.fa.fa-youtube-play {
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 40px;
+    background-color: #FF0000;
+    /* YouTube red */
+    color: white;
+    border-radius: 20%;
+    border: none;
+    cursor: pointer;
+    font-size: 28px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    /* subtle shadow */
+    transition: background-color 0.3s ease;
+    user-select: none;
+    outline: none;
+    padding: 0;
+}
+
+/* Section "making-beats" */
+#making-beats {
+    position: relative;
+    width: 200px;
+    z-index: 1;
+}
+
+/* Video element sizing */
+#DJ {
+    position: relative;
+    width: 20vh;
+    height: auto;
+}
+
+/* About me section styling */
+.about-me {
+    flex-direction: column;
+    max-width: 100%;
+    box-sizing: border-box;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    padding: 40px;
+    background-color: rgb(19, 19, 19);
+    color: white;
+    border-bottom: none;
+    overflow-y: hidden;
+}
+
+/* Paragraph styling inside about-me */
+.about-me p {
+    translate: 100%;
+    position: relative;
+    max-width: 50%;
+    text-indent: 2em;
+    transform: translateY(25%);
+    font-family: 'Jakarta', sans-serif;
+    line-height: 60px;
+    font-size: 1.3vi;
+    font-weight: lighter;
+}
+
+/* Container for 3D cube */
+#cube-container {
+    position: absolute;
+    border-color: black;
+    transform: translateY(25%);
+    cursor: pointer;
+    width: 400px;
+    height: 400px;
+    /* or use relative units like vw/vh */
+    z-index: 2;
+}

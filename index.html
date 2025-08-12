@@ -4,9 +4,14 @@
 
 
     <head>
+        <link rel="stylesheet" href="./styles/style.css" />
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
         <meta charset="UTF-8" />
 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <!-- Important for making the website look nice on all devices -->
 
         <title>R.J. DiCello</title>
@@ -21,29 +26,162 @@
         <script type="importmap">
             {
                 "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three@0.178.0/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.178.0/examples/jsm/"
+                    "three": "https://cdn.jsdelivr.net/npm/three@0.178.0/build/three.module.js",
+                    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.178.0/examples/jsm/",
+                    "dat.gui": "https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.module.js",
+                    "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.178.0/examples/jsm/"
                 }
             }
-        </script>
 
-        <link rel="stylesheet" href="style.css" />
+       
+        </script>
+        <script id="vertexshader" type="vertex">
+
+            // Code credit goes to @WaelYasmina, 
+            // https://github.com/WaelYasmina/audiovisualizer/blob/main/src/index.html
+            
+
+            uniform float u_time;
+
+            vec3 mod289(vec3 x)
+            {
+                return x - floor(x * (1.0 / 289.0)) * 289.0;
+            }
+            
+            vec4 mod289(vec4 x)
+            {
+                return x - floor(x * (1.0 / 289.0)) * 289.0;
+            }
+            
+            vec4 permute(vec4 x)
+            {
+                return mod289(((x*34.0)+10.0)*x);
+            }
+            
+            vec4 taylorInvSqrt(vec4 r)
+            {
+                return 1.79284291400159 - 0.85373472095314 * r;
+            }
+            
+            vec3 fade(vec3 t) {
+                return t*t*t*(t*(t*6.0-15.0)+10.0);
+            }
+
+            // Classic Perlin noise, periodic variant
+            float pnoise(vec3 P, vec3 rep)
+            {
+                vec3 Pi0 = mod(floor(P), rep); // Integer part, modulo period
+                vec3 Pi1 = mod(Pi0 + vec3(1.0), rep); // Integer part + 1, mod period
+                Pi0 = mod289(Pi0);
+                Pi1 = mod289(Pi1);
+                vec3 Pf0 = fract(P); // Fractional part for interpolation
+                vec3 Pf1 = Pf0 - vec3(1.0); // Fractional part - 1.0
+                vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
+                vec4 iy = vec4(Pi0.yy, Pi1.yy);
+                vec4 iz0 = Pi0.zzzz;
+                vec4 iz1 = Pi1.zzzz;
+
+                vec4 ixy = permute(permute(ix) + iy);
+                vec4 ixy0 = permute(ixy + iz0);
+                vec4 ixy1 = permute(ixy + iz1);
+
+                vec4 gx0 = ixy0 * (1.0 / 7.0);
+                vec4 gy0 = fract(floor(gx0) * (1.0 / 7.0)) - 0.5;
+                gx0 = fract(gx0);
+                vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);
+                vec4 sz0 = step(gz0, vec4(0.0));
+                gx0 -= sz0 * (step(0.0, gx0) - 0.5);
+                gy0 -= sz0 * (step(0.0, gy0) - 0.5);
+
+                vec4 gx1 = ixy1 * (1.0 / 7.0);
+                vec4 gy1 = fract(floor(gx1) * (1.0 / 7.0)) - 0.5;
+                gx1 = fract(gx1);
+                vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);
+                vec4 sz1 = step(gz1, vec4(0.0));
+                gx1 -= sz1 * (step(0.0, gx1) - 0.5);
+                gy1 -= sz1 * (step(0.0, gy1) - 0.5);
+
+                vec3 g000 = vec3(gx0.x,gy0.x,gz0.x);
+                vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);
+                vec3 g010 = vec3(gx0.z,gy0.z,gz0.z);
+                vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);
+                vec3 g001 = vec3(gx1.x,gy1.x,gz1.x);
+                vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);
+                vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);
+                vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);
+
+                vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));
+                g000 *= norm0.x;
+                g010 *= norm0.y;
+                g100 *= norm0.z;
+                g110 *= norm0.w;
+                vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));
+                g001 *= norm1.x;
+                g011 *= norm1.y;
+                g101 *= norm1.z;
+                g111 *= norm1.w;
+
+                float n000 = dot(g000, Pf0);
+                float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));
+                float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
+                float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));
+                float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));
+                float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
+                float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));
+                float n111 = dot(g111, Pf1);
+
+                vec3 fade_xyz = fade(Pf0);
+                vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
+                vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);
+                float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x); 
+                return 2.2 * n_xyz;
+            }
+
+            uniform float u_frequency;
+
+            void main() {
+                float noise = 50.0 * pnoise(position + u_time, vec3(10.0));
+                float displacement = (u_frequency / 30.) * (noise / 10.);
+                vec3 newPosition = position + normal * displacement;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+            }
+
+            
+         </script>
+
+        <script id="fragmentshader" type="x-shader/x-fragment">
+
+            uniform vec2 u_resolution;
+            uniform float u_red, u_blue, u_green;
+          
+            
+
+            void main() {
+                vec2 st = gl_FragCoord.xy / u_resolution;
+                gl_FragColor = vec4(u_red, u_blue, u_green, 1.0);
+                 
+            }
+
+         </script>
+
+
 
     </head>
+
+
+
 
     <body>
 
 
-
-
-        <video id="the-reason" width="1920" height="1080" autoplay muted loop disablePictureInPicture>
-            <source src="assets/videos/The Reason.mp4" type="video/mp4">
-        </video>
-
+        <iframe id="the-reason" width="1920" height="1080"
+            src="https://www.youtube.com/embed/7RIECqGeXU0?enablejsapi=1&autoplay=1&mute=1&controls=0&loop=1&playlist=7RIECqGeXU0"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
         <div class="home-container">
             <div id="name">R.J. DiCello</div>
             <div id="underline"></div>
-            <button id="button">Press here to listen</button>
+            <button id="button">Press here to listen</button>*/
 
             <div class="brand-statement-container">
                 <span class="brand-statement brand-statement-1">Software by day,</span>
@@ -52,67 +190,71 @@
         </div>
 
 
-
-        <div class="about-me">
-            <h1>About Me</h1>
-            <p>
-                Hi, I'm R.J. DiCello. I'm a 20 year old music producer and
-                computer programmer from Ohio. Right now, I'm a student at
-                Berklee College of Music. I'm very grateful to be here, even
-                though I almost wanted to leave a few months ago.
-            </p>
-            <p>
-                For the last 2 years, I was torn between music and computer
-                science. I knew I couldn't choose both, so I chose music,
-                and buried computer science. I came to Berklee not sure of
-                myself, so there were many times I felt miserable. I worked
-                to create meaningful projects, even when I hated what I was
-                doing. After 1.5 years, I couldn't handle the confusion, so
-                I took a gap semester. I became a dairy associate, stacking
-                dairy and frozen items on grocery store shelves. I remember
-                looking at myself in the freezer's glass reflection, thinking
-                about what I could be doing at school. It humbled me, making
-                Berklee seem like vacation, and teaching me that I might as
-                well work toward something that I resonate with, even in
-                the slightest. My mind was clearer, realizing that I could
-                go back to Berklee and try again with a different mindset.
-                I would be grateful to learn, be positive, expressive,
-                authentic, courageous, and original.
-            </p>
-            <p>
-                Now, I'm finishing my committments at Berklee, majoring in
-                Electronic Production and Design and minoring in Creative
-                Coding, and learning about software development and computer
-                science in my spare time. I have big plans for future projects,
-                and I know that I want to carry my morals I listed above into
-                everything I do.
-
-                Feel free to check out my music below.
-            </p>
-        </div>
+        <div id="work-bg"></div>
 
         <div class="work">
-            <h1>
+            <!--<h1> 
                 My Work
-            </h1>
+            </h1>-->
 
             <div class="the-reason-container">
-                <video id="the-reason" width="1920" height="1080" autoplay muted loop disablePictureInPicture>
-                    <source src="assets/videos/The Reason.mp4" type="video/mp4">
 
-                </video>
                 <h2>
-                    Skrillex - The Reason Remake
+                    The Reason Remake
                 </h2>
+
                 <p>
-                    This remix was made from scratch, aside from a few drum samples
+                    This remake of Skrillex's "The Reason" was made from scratch, aside from a few drum samples, vocals.
+                    very synth was made by ear from scratch using only Stock plugins (analog, meld, wavetable) except
+                    for
+                    native instruments massive.
                 </p>
+
+                <button id="audioButton" class="play"></button>
+
+
+                <div id="gui-container"></div>
+
             </div>
+            <div id="info-bg"></div>
+
+
+
+            <div id="threejs-container"></div>
+
+
+
+
+
 
 
         </div>
 
-        <script type="module" src="./main.js"></script>
+        <div class="about-me">
+
+
+
+
+
+            <p>
+                <b>I'm RJ, an electronic music producer, computer programmer, and pianist.</b>
+                I love creating things, whether it's music, or the idea of making software.
+                My mission is to challenge myself, learn as much as possible,
+                have an open mind, to be original, and to always believe in myself.
+                I'm obligated to keep these morals engraved in my work,
+                because they help me be the best version of myself.
+
+
+            </p>
+
+            <div id="cube-container"></div>
+
+
+
+        </div>
+        <script type="module" src="./scripts/main.js"></script>
+        <script type="module" src="./scripts/cube.js"></script>
+        <script type="module" src="./scripts/three.js"></script>
     </body>
 
 
