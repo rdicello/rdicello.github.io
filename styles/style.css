@@ -548,22 +548,45 @@ body {
     z-index: 2;
 }
 
+
+
 #youtube {
-    position: absolute;
+
     height: auto;
     width: 6%;
-    transform: translateX(10vw) translateY(15vh);
+
+
     border-radius: 30px;
-    box-shadow: 0px 0px 100px 0.2px #ffffff;
+
+    margin-right: 10px;
+    transform: translateY(20vh);
+
+}
+
+#github {
+    transform: translateY(20.5vh);
+    border-radius: 30px;
+
+
+
+    width: 6%;
+
+    background-color: rgb(255, 255, 255);
+
+    margin-right: 10px;
+
 }
 
 #gmail {
+
+    transform: translateY(20vh);
     border-radius: 30px;
-    position: absolute;
-    height: auto;
+
 
     width: 6%;
-    transform: translateX(20vw)translateY(15vh);
+
     background-color: rgb(255, 255, 255);
-    box-shadow: 0px 0px 100px 0.05px #ffffff;
+
+    margin-right: 10px;
+
 }
