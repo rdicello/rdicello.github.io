@@ -1,1 +1,19 @@
-A lot of the design comes down to trial and error. I started with a globe idea, and that turned into a much smaller idea due to the limited time. The first thing I added was 
+A lot of the design comes down to trial and error. I started with a globe idea, and that turned into a much smaller idea due to the limited time. I started fiddling around with animations. I researched proper CSS syntax, learning that I could reference html and body at the same time, or even * for everything. I learned about translation, animation with keyframes, font importing, padding, favicon, etc. It gave a very similar feeling to video editing, as it was solely based on the appearence and experience of the user. 
+
+I became very fond of html, as it was extremely straightforward. I know why people call it the skeleton of full stack. I learned about meta data tags, iframes, buttons, the relationships of divs and ids, and it was very intuitive. I learned that css and html were very fluid. I started to think of what I needed. I envisioned a cool animation, and I thought, what should I do to make it a rainbow color? I discovered that CSS had gradients, so boom -- done. I discovered that background objects and gradients could work together, if i manipulated the size of the backgrounds, creating a seamless loop. 
+
+As I added more animations, I completed the Home page, with an mp4 of a youtube video I made about a remake I created. I researched how to create a type-writing effect for the brand statement. This involved clever work with the usage of the margin, and overflow-x function which allows for the illusion of words being typed. The animations create the bar rectangle at the end of the letters.
+
+I began to use javascript when I started detecting the on scroll event, editing the css based on javascript variables.
+
+The biggie was the audio visualizer -- I had no idea how deep this would go. It started with me watching a Youtube video. He started talking about noise, specifically perlin 3D noise. He used the code of someone else using the glsl language to create the Math, which was very hard for me to understand. He added parameters for vertex_shading and fragment_shading -- still completely lost. I finally understood that vertex_shading deals with the 3D verticies in a scene and positionings, while the fragment_shading deals with color and depth for each pixel. This was very difficult because there was no IDE for syntax errors, only the console in Firefox. I added a few libraries to help me with the post-processing, rendering, controls, and gui -- which included RenderPass, OutputPass, UnrealBloomPass, EffectComposer, DatGUI, and OrbitControls. 
+
+The GLSL code helpmed me to import the perlin-noise, using uniform variables. These are the parameters that tell the GLSL what to input to the renderer. 
+
+I then implemeted the Three.JS audio listener, and this is were things also got tricky. I saw that the Youtube video used the getFrequency() method to retrieve frequency data for the reactivity of the noise, however I thought this did not look good. I thought about amplitude detection. I knew about the two types of detection -- rms and peak. I first tried peak, which worked, but I tried RMS and that worked better. I then had to get this data somehow, so I discovered that I could use analyzer.getByteFrequencyData(). The analysis node provides a fast Fourier Transform for frequency analysis. I then normalized the numbers by converting them to a smaller range [-1, 1]. 
+
+The next step was detecting the threshold of the audio -- when should the audio react? This took a lot of trial and error, but it was actually simple -- make a variable for threshold and make sure that the previous amplitude is more than the threshold.
+
+I added a ton of paramters communicating with uniform variables, and implemented this into the GUI with css. The css was a pain because the dat.gui has hidden elements embedded in CSS.
+
+Next, I added a basic Box mesh with images and videos using a video material, it also has orbit controls. 

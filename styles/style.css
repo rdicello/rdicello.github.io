@@ -278,6 +278,7 @@ body {
 
 /* Style for the button with rainbow background and glow */
 #button {
+    cursor: pointer;
     position: fixed;
     top: 25%;
     left: -30%;
@@ -301,6 +302,7 @@ body {
         10s rainbow-animate linear infinite forwards;
     /* Infinite rainbow animation */
     text-shadow: var(--text-shadow);
+
 }
 
 /* Background block for "work" section */
@@ -374,6 +376,8 @@ body {
     font-family: 'Jakarta', sans-serif;
     position: relative;
 }
+
+
 
 /* Container for Three.js canvas */
 #threejs-container {
@@ -500,18 +504,32 @@ body {
     color: white;
     border-bottom: none;
     overflow-y: hidden;
+    font-family: 'Jakarta', sans-serif;
 }
 
 /* Paragraph styling inside about-me */
 .about-me p {
+
     translate: 100%;
     position: relative;
     max-width: 50%;
     text-indent: 2em;
     transform: translateY(25%);
-    font-family: 'Jakarta', sans-serif;
-    line-height: 60px;
-    font-size: 1.3vi;
+    line-height: 50px;
+    font-size: 1.6vi;
+
+
+}
+
+.about-me p2 {
+    translate: 100%;
+    position: relative;
+    max-width: 50%;
+    text-indent: 2em;
+    transform: translateY(25%);
+
+    line-height: 50px;
+    font-size: 1.4vi;
     font-weight: lighter;
 }
 
@@ -525,4 +543,24 @@ body {
     height: 400px;
     /* or use relative units like vw/vh */
     z-index: 2;
+}
+
+#youtube {
+    position: absolute;
+    height: auto;
+    width: 6%;
+    transform: translateX(10vw) translateY(15vh);
+    border-radius: 30px;
+    box-shadow: 0px 0px 100px 0.2px #ffffff;
+}
+
+#gmail {
+    border-radius: 30px;
+    position: absolute;
+    height: auto;
+
+    width: 6%;
+    transform: translateX(20vw)translateY(15vh);
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0px 0px 100px 0.05px #ffffff;
 }
