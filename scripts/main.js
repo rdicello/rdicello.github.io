@@ -51,11 +51,18 @@ window.addEventListener('scroll', () => {
 
 });
 const workSection = document.querySelector('.work');
-
+const aboutSection = document.querySelector('.about-me');
+const nameButton = document.getElementById('name');
 button.addEventListener('click', () => {
     workSection.scrollIntoView({ behavior: 'smooth' });
-    console.log("hi")
+
 });
+nameButton.addEventListener('click', () => {
+    aboutSection.scrollIntoView({ behavior: 'smooth' });
+
+});
+
+
 
 
 

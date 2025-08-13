@@ -103,6 +103,9 @@ body {
 
 /* Name text styling */
 #name {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
     opacity: 0;
     /* Start invisible */
     color: white;
